@@ -1,9 +1,40 @@
 import requests
 from bs4 import BeautifulSoup
+import sqlite3
+
+
+def insert_job(job_data):
+    """Inserts a single job's data into the SQLite database."""
+    conn = sqlite3.connect("jobs.db")
+    cursor = conn.cursor()
+
+    # The 'INSERT OR IGNORE' command is key. If the 'link' is already in the table
+    # (due to the UNIQUE constraint), this command will do nothing and not raise an error.
+    sql_command = """
+    INSERT OR IGNORE INTO jobs (title, company, link, experience, date_posted, location)
+    VALUES (?, ?, ?, ?, ?, ?);
+    """
+
+    # The values to be inserted must be in a tuple, in the correct order.
+    values_to_insert = (
+        job_data.get("title"),
+        job_data.get("company"),
+        job_data.get("link"),
+        job_data.get("experience"),
+        job_data.get("date posted"),  # Make sure this key matches your dictionary
+        job_data.get("location"),
+    )
+
+    cursor.execute(sql_command, values_to_insert)
+
+    conn.commit()
+    conn.close()
+
 
 MAX_PAGES_TO_SCRAPE = 3
 scraped_jobs_data = []
 BASE_URL = "https://builtin.com"
+
 
 # ---------------------------------#
 
@@ -94,7 +125,7 @@ for page_num in range(1, MAX_PAGES_TO_SCRAPE + 1):
                 "location": job_location,
             }
 
-            scraped_jobs_data.append(job_data)
+            insert_job(job_data)
 
         # --- After the loop is finished ---
         if scraped_jobs_data:
