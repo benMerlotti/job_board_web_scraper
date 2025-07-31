@@ -1,5 +1,7 @@
 # Automated Job Scraper & Notifier
 
+![Python](https://img.shields.io/badge/python-3.11-blue.svg)
+
 ## Project Overview
 
 This is a Python-based application designed to streamline the job search process. It allows a user to manually trigger a process that scrapes job listings from a target website ([builtin.com](https://builtin.com)), stores them in a local SQLite database, and sends an email notification containing only the new, un-notified job opportunities found since the last run.
