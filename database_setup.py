@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS jobs (
     link TEXT NOT NULL UNIQUE,
     experience TEXT,
     date_posted TEXT,
-    location TEXT
+    location TEXT,
+    is_notified INTEGER DEFAULT 0
 );
 """
 
